@@ -11,6 +11,7 @@ class MetadataHttp {
   /// メタデータ検索
   Future<Page<MetadataEntry>> searchMetadata(
       {required MetadataSearchCriteria dto}) async {
+    /** RESTゲートウェイからJson取得 **/
     Map<String, dynamic> jsonData = await _searchMetadataJson(dto);
 
     /** Metadata Entry 生成 **/
@@ -113,6 +114,6 @@ class MetadataHttp {
     // パラメータマップ作成
     Map<String, dynamic>? params = _convMap(dto);
     // 検索
-    return await https.get(params);
+    return await https.get(params: params);
   }
 }

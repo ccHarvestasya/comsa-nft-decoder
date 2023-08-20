@@ -332,9 +332,8 @@ void main() {
     }, () => clientSingle);
 
     StatisticsServiceHttp ssHttp = StatisticsServiceHttp();
-    String restGatewayHost = ssHttp.randomRestGatewayHost();
+    String restGatewayHost = ssHttp.getRestGatewayHost();
 
     expect(restGatewayHost, 'https://0-0-0-0-0-0-0-0-8.tokyo-node.jp:3001');
   });
-
 }

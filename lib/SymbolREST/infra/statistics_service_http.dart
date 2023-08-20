@@ -194,6 +194,6 @@ class StatisticsServiceHttp {
       'ssl': 'true',
     };
 
-    return await https.get(params);
+    return await https.get(params: params);
   }
 }

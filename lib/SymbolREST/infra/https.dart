@@ -16,7 +16,7 @@ class Https {
 
   /// Https Get取得<br>
   /// [params] Getパラメータ<br>
-  Future<dynamic> get(Map<String, dynamic>? params) async {
+  Future<dynamic> get({Map<String, dynamic>? params}) async {
     dynamic jsonData = [];
 
     Uri uri = Uri();

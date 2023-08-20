@@ -9,7 +9,7 @@ import 'package:http/testing.dart';
 
 void main() {
   final clientSS = MockClient(
-        (request) async {
+    (request) async {
       return http.Response(
         '''
         [
@@ -144,7 +144,7 @@ void main() {
   );
 
   final clientNormal = MockClient(
-        (request) async {
+    (request) async {
       return http.Response(
         '''
         {
@@ -281,7 +281,8 @@ void main() {
     }, () => clientSS);
     Page<MetadataEntry> metadataEntryPage = await http.runWithClient(() async {
       MetadataHttp metadataHttp = MetadataHttp();
-      return await metadataHttp.searchMetadata(dto: MetadataSearchCriteria());
+      return await metadataHttp.searchMetadata(
+          dto: MetadataSearchCriteria(targetId: '0F82D168E703BC51'));
     }, () => clientNormal);
 
     // ページ確認
