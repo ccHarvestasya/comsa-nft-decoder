@@ -25,6 +25,8 @@ class StatisticsServiceHttp {
   /// Statistics Service クラス
   final List<StatisticsService> _ssList = [];
 
+  String? _restGatewayHost;
+
   /// パブリックコンストラクタ
   factory StatisticsServiceHttp() {
     return _instance;
@@ -52,8 +54,16 @@ class StatisticsServiceHttp {
     return _ssList;
   }
 
+  /// Restゲートウェイ取得
+  String getRestGatewayHost({bool isReacquisition = false}) {
+    if (isReacquisition || _restGatewayHost == null) {
+      _restGatewayHost = _randomRestGatewayHost();
+    }
+    return _restGatewayHost!;
+  }
+
   /// ランダムRestゲートウェイ取得
-  String randomRestGatewayHost() {
+  String _randomRestGatewayHost() {
     if (_ssList.isEmpty) {
       throw Exception('Statistics Service クラスが初期化されていません');
     }

@@ -1,10 +1,11 @@
-import './metadata_search_criteria.dart';
-import './page.dart';
+import 'package:comsa_nft_decoder/SymbolREST/infra/statistics_service_http.dart';
+
 import '../model/metadata/metadata_entry.dart';
-import '../symbol_rest_prop.dart';
 import '../util/address_util.dart';
 import '../util/string_util.dart';
 import 'https.dart';
+import 'metadata_search_criteria.dart';
+import 'page.dart';
 
 class MetadataHttp {
   /// メタデータ検索
@@ -106,8 +107,8 @@ class MetadataHttp {
       MetadataSearchCriteria dto) async {
     // Https生成
     Https https = Https(
-      url: SymbolRestProp.statisticsServiceHost,
-      path: '${SymbolRestProp.statisticsServicePath}/metadata',
+      url: StatisticsServiceHttp().getRestGatewayHost(),
+      path: '/metadata',
     );
     // パラメータマップ作成
     Map<String, dynamic>? params = _convMap(dto);

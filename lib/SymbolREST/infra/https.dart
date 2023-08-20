@@ -21,7 +21,7 @@ class Https {
 
     Uri uri = Uri();
     try {
-      uri = Uri.https(url, path, params);
+      uri = Uri.https(url.replaceAll('https://', ''), path, params);
       debugPrint('URL: ${uri.toString()}');
       http.Response response = await http.get(uri);
 
@@ -31,7 +31,7 @@ class Https {
       } else {
         // 取得失敗
         String msg = 'request failed.\n';
-        msg += 'URL(GET): $uri\n';
+        msg += 'URL(GET): ${uri.toString()}\n';
         msg += 'Status: ${response.statusCode}\n';
         throw HttpException(msg);
       }
@@ -39,7 +39,7 @@ class Https {
       rethrow;
     } on Exception {
       String msg = 'access failed.\n';
-      msg += 'URL: $uri\n';
+      msg += 'URL: ${uri.toString()}\n';
       throw Exception(msg);
     }
 
