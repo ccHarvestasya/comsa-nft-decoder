@@ -1,4 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:symbol_ddk/infra/statistics_service_http.dart';
+import 'package:symbol_ddk/util/comsa_nft.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,11 +35,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final TextEditingController _tf1 = TextEditingController();
+  late Uint8List _nftData;
+  Future<void>? _nftFuture;
 
-  void _incrementCounter() {
+  @override
+  void initState() {
+    super.initState();
+
+    StatisticsServiceHttp ssHttp = StatisticsServiceHttp();
+    ssHttp.init();
+  }
+
+  void _getNft() {
     setState(() {
-      _counter++;
+      _nftFuture = Future(() async {
+        ComsaNft comsaNft = ComsaNft();
+        _nftData = await comsaNft.decoder(mosaicId: _tf1.text);
+      });
     });
   }
 
@@ -47,22 +65,53 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            TextField(
+              controller: _tf1,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            ElevatedButton(
+              onPressed: _getNft,
+              child: const Text('GO'),
+            ),
+            FutureBuilder(
+              future: _nftFuture,
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return const Center(
+                      child: SizedBox(
+                        height: 600,
+                        width: 600,
+                      ),
+                    );
+                  case ConnectionState.waiting:
+                  case ConnectionState.active:
+                    return Center(
+                      child: SizedBox(
+                        height: 600,
+                        width: 600,
+                        child: LoadingAnimationWidget.fourRotatingDots(
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 100,
+                        ),
+                      ),
+                    );
+                  case ConnectionState.done:
+                    return SingleChildScrollView(
+                      child: Center(
+                        child: Image.memory(
+                          _nftData,
+                          width: 600,
+                          height: 600,
+                        ),
+                      ),
+                    );
+                }
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
